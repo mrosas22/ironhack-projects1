@@ -39,7 +39,7 @@
 
     function isReady() {
         let ready = true;
-        for(var k in resourceCache) {
+        for(let k in resourceCache) {
             if(resourceCache.hasOwnProperty(k) &&
                !resourceCache[k]) {
                 ready = false;
