@@ -1,19 +1,18 @@
 let requestAnimFrame = (function(){
   return window.requestAnimationFrame       ||
+      window.webkitRequestAnimationFrame    ||
+      window.mozRequestAnimationFrame       ||
+      window.oRequestAnimationFrame         ||
+      window.msRequestAnimationFrame        ||
       function(callback){
-          //attempts to render a 60 frames/second.
-          // window.setTimeout(callback, 1000 / 60);
           window.setInterval(callback, 120);
       };
 })();
 //Global variables
-let terrainPattern;
+let background, controller, spriteSheet, isGameOver;
 const spriteSize = 116;
-let controller; 
-let spriteSheet;
 let enemies = [];
 let frames = 0;
-let isGameOver;
 let score = 0;
 let scoreEl = document.getElementById('score');
 
@@ -21,7 +20,7 @@ let scoreEl = document.getElementById('score');
 let canvas = document.createElement('canvas');
 let ctx = canvas.getContext('2d');
 canvas.width = 1050;
-canvas.height = 350;
+canvas.height = 480;
 
 resources.onReady(init);
 document.body.appendChild(canvas);
@@ -37,7 +36,7 @@ function main (){
 }
 //create background pattern and hooks up the "Play Again" button
 function init() {
-  terrainPattern = ctx.createPattern(resources.get('images/terrain.png'), 'repeat');
+  background = ctx.createPattern(resources.get('images/backgroundext.png'), 'repeat');
   document.getElementById('play-again').addEventListener('click', function() {
       reset();
   });
@@ -52,12 +51,6 @@ resources.load([
   'images/terrain.png'
 ]);
 resources.onReady(init);
-
-//A vector for a 2d space
-function Vector(x, y) {
-  this.x = x || 0;
-  this.y = y || 0;
-}
 
 //Animation constructor function
 function Animation (frameSet, delay) {
@@ -100,13 +93,12 @@ Animation.prototype = {
 function Player(x,y){
   this.x = x;
   this.y = y;
-  this.width = 144;
-  this.height = 194;
+  this.width = 116;
+  this.height = 116;
   this.speedX = 0;
   this.speedY = 0;
   this.jumping = true;
   this.animation = new Animation ();
-  Vector.call(this, x, y);
   this.draw = function (){
       this.animation.draw(this.x, this.y)
   };
@@ -124,18 +116,17 @@ function Player(x,y){
   this.weapon = function(){
       return {
         x: this.x + (this.width - 10),
-        y: this.y + (this.height - 101)
+        y: this.y + (this.height - 80)
       }
   }  
 }
-Player.prototype = Object.create(Vector.prototype);
 
 spriteSheet = {
   frameSets:[[0], [1, 6], [1, 6]],// standing still, walk right, walk left
   image:new Image()
 };
 // Game state
-let player = new Player(15, 15)
+let player = new Player(15, 300)
 
 //constructor to create enemies instances
 function Enemy (width, height, color, x, y){
@@ -228,10 +219,10 @@ function updatePlayer(){
   if (controller.up.active && !player.jumping) {
       controller.up.active = false;
       player.jumping = true;
-      player.speedY -= 2.5;
+      player.speedY -= 10;
   }
   if (controller.left.active) {
-      //To change the animation, all you have to do is call animation.change
+      //To change the animation call animation.change
       player.animation.change(spriteSheet.frameSets[2], 15);
       player.speedX -= 0.05;
   }
@@ -239,7 +230,7 @@ function updatePlayer(){
       player.animation.change(spriteSheet.frameSets[1], 15);
       player.speedX += 0.05;
   }
-  //If you're just standing still, change the animation to standing still
+  //change the animation to standing still
   if (!controller.left.active && !controller.right.active) {
       player.animation.change(spriteSheet.frameSets[0], 20);
   }
@@ -274,7 +265,8 @@ function updateGameArea (){
   frames +=1;
   if (frames % 360 === 0) {
     x = canvas.width;
-    enemies.push(new Enemy(116, 80, "green", x, 116));
+    y = Math.random() * (canvas.height - 80)
+    enemies.push(new Enemy(116, 80, "green", x, y));
   }
   drawEverything()
 }
@@ -307,7 +299,7 @@ function updateEntities(){
 //draw eveything in canvas
 function drawEverything(){
   //we render the background by setting the fillStyle of the context
-  ctx.fillStyle = terrainPattern;
+  ctx.fillStyle = background;
   //and then render the whole canvas with fillRect
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   //draw player
