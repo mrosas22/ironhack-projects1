@@ -8,7 +8,7 @@ let requestAnimFrame = (function(){
 })();
 //Global variables
 let terrainPattern;
-const spriteSize = 190;
+const spriteSize = 116;
 let controller; 
 let spriteSheet;
 let enemies = [];
@@ -47,8 +47,8 @@ function init() {
 }
 //loading resources
 resources.load([
-  'images/running.png',
-  'images/walking.png',
+  'images/backgroundext.png',
+  'images/player1.png',
   'images/terrain.png'
 ]);
 resources.onReady(init);
@@ -124,14 +124,14 @@ function Player(x,y){
   this.weapon = function(){
       return {
         x: this.x + (this.width - 10),
-        y: this.y + (this.height - 51)
+        y: this.y + (this.height - 101)
       }
   }  
 }
 Player.prototype = Object.create(Vector.prototype);
 
 spriteSheet = {
-  frameSets:[[0], [1, 5], [4, 6]],// standing still, walk right, walk left
+  frameSets:[[0], [1, 6], [1, 6]],// standing still, walk right, walk left
   image:new Image()
 };
 // Game state
@@ -248,7 +248,7 @@ function updatePlayer(){
       player.y += player.speedY;
       player.speedX *= 0.9;
       player.speedY *= 0.9;
-  if (player.y + player.height > canvas.height - 2) {
+  if (player.y + player.height > canvas.height - 4) {
       player.jumping = false;
       player.y = canvas.height - 2 - player.height;
       player.speedY = 0;
@@ -274,7 +274,7 @@ function updateGameArea (){
   frames +=1;
   if (frames % 360 === 0) {
     x = canvas.width;
-    enemies.push(new Enemy(80, 80, "green", x, 280));
+    enemies.push(new Enemy(116, 80, "green", x, 116));
   }
   drawEverything()
 }
@@ -312,7 +312,7 @@ function drawEverything(){
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   //draw player
   ctx.drawImage(spriteSheet.image, player.animation.frame * spriteSize, 0, spriteSize, spriteSize, Math.floor(player.x), Math.floor(player.y), spriteSize, spriteSize);
-  spriteSheet.image.src = "./images/walking.png";// Start loading the image.
+  spriteSheet.image.src = "./images/player1.png";// Start loading the image.
   updateEntities();
 }
 
