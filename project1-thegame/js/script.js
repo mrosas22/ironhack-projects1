@@ -17,7 +17,7 @@ let scoreEl = document.getElementById('score');
   //create canvas
   let canvas = document.createElement('canvas');
   let ctx = canvas.getContext('2d');
-  canvas.width = 1050;
+  canvas.width = 1250;
   canvas.height = 350;
   
   resources.onReady(init);
@@ -147,7 +147,7 @@ function Enemy (width, height, x, y){
     this.xVelocity = 1;
     //keep enemies in bounds
     this.inBounds = function(){
-        return this.x >= 0 && this.x <= 1050
+        return this.x >= 0 && this.x <= 1250
             && this.y >= 0 && this.y <= 350;
     };
     this.image  = './images/enemy.png';
@@ -180,7 +180,7 @@ function Bullet (e){
     e.color     = "red";
     //set boundaries for bullets
     e.inBounds = function(){
-        return e.x >= 0 && e.x <= 1050
+        return e.x >= 0 && e.x <= 1250
             && e.y >= 0 && e.y <= 350;
     };
     e.draw = function (){
@@ -337,6 +337,10 @@ function handleCollisions(){
                 // Add score
                 score += 1;
             }
+            if(score === 10) {
+                alert("YOU WIN, CONGRATULATIONS!");
+                document.location.reload();
+            }
     
         });
     });
@@ -380,6 +384,3 @@ function reset(){
     window.addEventListener("keyup", controller.keyUpDown);
     score = 0;
 }
-  
-  
-  

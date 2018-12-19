@@ -14,7 +14,7 @@ canvas{
   border: solid 1px black
 }
 .arrows-img {
-  width: 150px;
+  width: 75px;
 }
 body button {
   font-size: 30px;
@@ -27,23 +27,21 @@ body button {
   margin-bottom: 20px;
 }
 .wrapper {
-  /* width: 1656px; */
   margin: 0 auto;
   margin-top: 2em;
 }
 #instructions {
-  float: left;
   font-family: sans-serif;
   color: #757575;
 }
 #score {
   float: right;
-  color: green;
+  color: red;
   font-size: 2em;
 }
 #game-over, #game-over-overlay {
   margin: auto;
-  width: 1050px;
+  width: 1250px;
   height: 350px;
   position: absolute;
   top: 0;
