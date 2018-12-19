@@ -274,8 +274,8 @@ function updateGameArea (){
     if (frames % 360 === 0) {
       x = canvas.width;
       y = Math.random() * (canvas.height - 80)
-      enemies.push(new Enemy(116, 80, x, 170))
-      if (y > 130 && y <= 240){
+      enemies.push(new Enemy(116, 80, x, 160))
+      if (y > 180 && y <= 240){
       enemies.push(new Enemy(116, 80, x, y));
       }
     }
@@ -384,3 +384,6 @@ function reset(){
     window.addEventListener("keyup", controller.keyUpDown);
     score = 0;
 }
+  
+  
+  
